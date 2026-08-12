@@ -4,6 +4,7 @@ import com.charitymanagement.api.charitymanagementback.auth.dto.AuthResponse;
 import com.charitymanagement.api.charitymanagementback.auth.dto.LoginRequest;
 import com.charitymanagement.api.charitymanagementback.auth.dto.RegisterRequest;
 import com.charitymanagement.api.charitymanagementback.auth.entity.User;
+import com.charitymanagement.api.charitymanagementback.auth.entity.UserStatus;
 import com.charitymanagement.api.charitymanagementback.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +31,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
+                .status(UserStatus.ACTIVE)
                 .build();
 
         userRepository.save(user);
