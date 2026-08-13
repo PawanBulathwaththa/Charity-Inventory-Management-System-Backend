@@ -34,6 +34,18 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private UserRole role;
 
+    /**
+     * Nullable on purpose: rows created before this column existed have no value, and a null is
+     * treated as {@link UserStatus#ACTIVE} so no existing account is locked out.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20)
+    private UserStatus status;
+
+    public UserStatus getStatus() {
+        return status == null ? UserStatus.ACTIVE : status;
+    }
+
     // ── UserDetails interface ─────────────────────────────────────────────────
 
     @Override
@@ -57,5 +69,5 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() { return true; }
 
     @Override
-    public boolean isEnabled() { return true; }
+    public boolean isEnabled() { return getStatus() == UserStatus.ACTIVE; }
 }

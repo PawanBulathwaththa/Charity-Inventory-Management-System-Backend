@@ -1,5 +1,7 @@
 package com.charitymanagement.api.charitymanagementback.auth.controller;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -8,7 +10,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
 
+/** Ordered first so these two cases keep their original response shape. */
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class AuthExceptionHandler {
 
     /** Wrong email / password */
