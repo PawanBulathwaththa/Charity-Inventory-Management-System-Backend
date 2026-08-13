@@ -15,6 +15,7 @@ Everything is **backend only**: JSON APIs, no UI. Authentication is JWT-based an
 
 ## 📚 Table of contents
 
+- [Getting started (clone & run locally)](#-getting-started-clone--run-locally)
 - [What the system does](#-what-the-system-does)
 - [Architecture](#-architecture)
 - [Modules](#-modules)
@@ -33,6 +34,117 @@ Everything is **backend only**: JSON APIs, no UI. Authentication is JWT-based an
 - [Testing](#-testing)
 - [Project structure](#-project-structure)
 - [Troubleshooting](#-troubleshooting)
+
+---
+
+## 🚀 Getting started (clone & run locally)
+
+New to this repo? Welcome 👋 — follow the steps below in order and you'll have the API running
+locally in about 10–15 minutes. Nothing here is destructive, so don't worry about breaking anything;
+if a step doesn't work, jump to [Troubleshooting](#-troubleshooting) or ask a teammate.
+
+### ✅ Before you start, install these
+
+| Tool | Version | How to check you have it |
+| --- | --- | --- |
+| ☕ JDK | 17 | `java -version` |
+| 🧰 Maven | 3.6+ *(optional — see note below)* | `mvn -version` |
+| 🐬 MySQL | 8.0+ | `mysql --version` |
+| 🌿 Git | any recent version | `git --version` |
+
+> 💡 **No Maven install? No problem.** The repo ships with a Maven *wrapper* (`mvnw` /
+> `mvnw.cmd`), so every command below works without Maven being on your machine at all.
+
+Pick an IDE if you don't already have one — **IntelliJ IDEA** is the easiest for a Spring Boot
+project, but VS Code (with the Java Extension Pack) and Eclipse both work fine.
+
+### 1️⃣ Get the code
+
+```bash
+git clone https://github.com/PawanBulathwaththa/Charity-Inventory-Management-System-Backend.git
+cd Charity-Inventory-Management-System-Backend
+```
+
+Working from the active feature branch rather than `main`? Switch to it:
+
+```bash
+git checkout feature/charity-inventory-backend
+```
+
+### 2️⃣ Set up the database
+
+The app expects a MySQL user/database it can use — the values below match the defaults already in
+`application.properties`, so if you run this exact SQL you won't need to change any config:
+
+```sql
+CREATE DATABASE IF NOT EXISTS charity_db;
+CREATE USER IF NOT EXISTS 'charity_user'@'localhost' IDENTIFIED BY 'Charity@123';
+GRANT ALL PRIVILEGES ON charity_db.* TO 'charity_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+Prefer to use your own MySQL user (e.g. `root`)? That's fine too — just set the `DB_USERNAME` and
+`DB_PASSWORD` environment variables when you run the app in step 4. See
+[Database setup](#-database-setup) for the full details.
+
+You don't need to create any tables by hand — the app builds its own schema the first time it
+starts up.
+
+### 3️⃣ Open the project in your IDE *(optional, but makes life easier)*
+
+- **IntelliJ IDEA:** `File → Open`, pick the folder you cloned, choose "Open as Maven Project".
+- **VS Code:** just open the folder — the Java Extension Pack detects `pom.xml` automatically.
+
+Give it a minute or two to download dependencies the first time. If you see red squiggles under
+things like `getName()` or `@RequiredArgsConstructor`, that's Lombok — install the **Lombok
+plugin** for your IDE and turn on **annotation processing**. This is an IDE-only quirk; the actual
+build works without it.
+
+### 4️⃣ Run the app
+
+```bash
+# Windows
+mvnw.cmd clean spring-boot:run
+
+# macOS / Linux
+chmod +x mvnw
+./mvnw clean spring-boot:run
+```
+
+The first start takes ~20–30 seconds while the database schema is being built — that's normal.
+Once you see Spring Boot's log settle down, the API is live at **`http://localhost:8080`**.
+
+### 5️⃣ Check it actually worked
+
+Open this in a browser or run it in a terminal:
+
+```bash
+curl http://localhost:8080/api/health
+```
+
+A healthy response looks like `{"status":"UP","database":"CONNECTED",...}`.
+
+Then take a look around:
+
+- 📖 **Swagger UI** — `http://localhost:8080/swagger-ui.html` — browse and try every endpoint from
+  the browser, no extra tools needed.
+- 📮 **Postman** — import `postman/charity-inventory-management.postman_collection.json` (see
+  [Postman](#-postman)) if you'd rather work from there.
+
+### 6️⃣ (Optional) Run the test suite
+
+```bash
+./mvnw clean test
+```
+
+These tests run against an in-memory database, completely separate from your local `charity_db`,
+so there's no risk to your data — a great way to confirm your setup is healthy before writing code.
+
+---
+
+🎉 **That's it — you're set up.** If anything didn't go to plan, the
+[Troubleshooting](#-troubleshooting) section below covers the most common hiccups (wrong DB
+password, port already in use, Lombok errors, etc.).
 
 ---
 
